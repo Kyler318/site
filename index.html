@@ -38,12 +38,21 @@ code,.code{font-family:var(--mono);font-size:.92em;font-weight:500}
 .logo{width:48px;height:48px;background:var(--yellow);border:var(--b);box-shadow:var(--sh);display:grid;place-items:center;font:700 17px var(--mono)}
 .brand h1{margin:0;font:900 24px/1.1 var(--head);letter-spacing:.5px}
 .brand p{margin:2px 0 0;font-size:14px;color:var(--mute);font-weight:500}
-.modes{display:flex;border:var(--b);box-shadow:var(--sh);background:var(--white)}
-.mode{display:flex;align-items:center;gap:8px;border:0;background:var(--white);padding:9px 16px;font-weight:900;font-size:16px}
-.mode + .mode{border-left:var(--b)}
-.mode[aria-pressed="true"]{background:var(--red)}
-.mode:hover{background:var(--yellow)}
-.mode[aria-pressed="true"]:hover{background:var(--red)}
+
+/* ---------- home ---------- */
+.home h2{margin:0 0 6px;font:900 34px/1.15 var(--head)}
+.home p.lead{margin:0 0 24px;color:var(--mute);font-weight:500}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.choice{display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;border:var(--b);box-shadow:var(--sh-l);padding:24px 22px;transition:transform .12s ease,box-shadow .12s ease}
+.choice:hover{transform:translate(-2px,-2px);box-shadow:10px 10px 0 var(--ink)}
+.choice:active{transform:translate(6px,6px);box-shadow:2px 2px 0 var(--ink)}
+.choice.c-review{background:var(--red)} .choice.c-practice{background:var(--yellow)}
+.choice .big-ic{width:56px;height:56px;display:grid;place-items:center;background:var(--white);border:var(--b)}
+.choice .big-ic .ic{width:30px;height:30px}
+.choice b{font:900 28px/1.2 var(--head)}
+.choice .desc{font-weight:500;font-size:16px}
+.choice .cta{margin-top:auto;display:inline-flex;align-items:center;gap:6px;background:var(--ink);color:var(--white);font-weight:900;padding:6px 14px}
+.choice .sub{font-size:14px;font-weight:700}
 
 /* ---------- buttons ---------- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:var(--b);background:var(--white);box-shadow:var(--sh);padding:9px 18px;font-weight:900;font-size:16px;transition:transform .12s ease,box-shadow .12s ease,background .15s}
@@ -147,7 +156,10 @@ footer{border-top:var(--b);padding:16px 0 30px;font-size:14px;color:var(--mute);
   .stat span{font-size:12px}
   .brand h1{font-size:20px} .brand p{display:none}
   .logo{width:40px;height:40px;font-size:14px}
-  .modes{width:100%} .mode{flex:1;justify-content:center;padding:8px 6px;font-size:15px}
+  .choices{grid-template-columns:1fr;gap:18px}
+  .choice{padding:18px 16px;box-shadow:6px 6px 0 var(--ink)}
+  .choice b{font-size:24px}
+  .home h2{font-size:27px}
   .jumps{margin-left:0}
   .card{padding:16px 14px;box-shadow:5px 5px 0 var(--ink)}
   .q-text{font-size:17px}
@@ -179,7 +191,7 @@ footer{border-top:var(--b);padding:16px 0 30px;font-size:14px;color:var(--mute);
   .stat b{font-size:20px}
   .start h2{font-size:27px}
 }
-@media (max-width:360px){.brand h1{font-size:18px}.mode{font-size:14px;gap:4px}.mode .ic{width:16px;height:16px}.res-actions .btn{flex:1 1 100%}.stat{padding:8px}.stat b{font-size:17px}.stat span{font-size:11px}.big{font-size:52px}.nav-row .btn{font-size:14px}.nav-row .btn .ic{display:none}}
+@media (max-width:360px){.brand h1{font-size:18px}.res-actions .btn{flex:1 1 100%}.stat{padding:8px}.stat b{font-size:17px}.stat span{font-size:11px}.big{font-size:52px}.nav-row .btn{font-size:14px}.nav-row .btn .ic{display:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -209,12 +221,9 @@ footer{border-top:var(--b);padding:16px 0 30px;font-size:14px;color:var(--mute);
       <div class="logo" aria-hidden="true">&lt;/&gt;</div>
       <div><h1>HTML 小測溫習</h1><p>50 題選擇題，每題都有答案和解析</p></div>
     </div>
-    <div class="modes" role="group" aria-label="切換模式">
-      <button class="mode" id="modeReview" aria-pressed="true"><svg class="ic"><use href="#i-book"/></svg>溫習 50 題</button>
-      <button class="mode" id="modePractice" aria-pressed="false"><svg class="ic"><use href="#i-bolt"/></svg>隨機刷 20 題</button>
-    </div>
+    <button class="btn small" id="homeBtn" hidden><svg class="ic"><use href="#i-left"/></svg>主頁</button>
   </div>
-  <div class="wrap toolbar" id="reviewBar">
+  <div class="wrap toolbar" id="reviewBar" hidden>
     <button class="btn yellow" id="toggleAll" aria-pressed="false"><svg class="ic"><use href="#i-eye"/></svg><span>顯示全部答案</span></button>
     <div class="counter" aria-live="polite"><div class="bar" aria-hidden="true"><i id="seenBar"></i></div><span id="seenText">已看答案 0 / 50</span></div>
     <nav class="jumps" aria-label="跳到題目" id="jumps"></nav>
@@ -222,23 +231,32 @@ footer{border-top:var(--b);padding:16px 0 30px;font-size:14px;color:var(--mute);
 </header>
 
 <main class="wrap">
+  <!-- 開始頁：選擇模式 -->
+  <section id="home" class="home" aria-label="選擇模式">
+    <h2>你想怎樣溫習？</h2>
+    <p class="lead">選擇一個模式開始。之後隨時可以按頁頂的「主頁」返回這頁重新選擇。</p>
+    <div class="choices">
+      <button class="choice c-review" id="chooseReview">
+        <span class="big-ic"><svg class="ic"><use href="#i-book"/></svg></span>
+        <b>溫習 50 題</b>
+        <span class="desc">逐題看全部 50 題，每題可按「顯示答案」看答案和解析。</span>
+        <span class="cta">開始溫習<svg class="ic"><use href="#i-right"/></svg></span>
+      </button>
+      <button class="choice c-practice" id="choosePractice">
+        <span class="big-ic"><svg class="ic"><use href="#i-bolt"/></svg></span>
+        <b>隨機刷 20 題</b>
+        <span class="desc">隨機抽 20 題，A–D 次序亦會打亂，按下即開始計時。交卷後看成績和錯題解析。</span>
+        <span class="sub" id="bestText" hidden></span>
+        <span class="cta" id="practiceCta">開始刷題<svg class="ic"><use href="#i-right"/></svg></span>
+      </button>
+    </div>
+  </section>
+
   <!-- 溫習模式 -->
-  <section id="review" aria-label="溫習全部題目"></section>
+  <section id="review" hidden aria-label="溫習全部題目"></section>
 
   <!-- 刷題模式 -->
   <section id="practice" hidden aria-label="隨機刷題">
-    <div class="panel start" id="pStart">
-      <h2>隨機刷 20 題</h2>
-      <p class="lead">由 50 題題庫隨機抽出 20 題，A–D 選項次序亦會打亂。答完交卷就會看到成績、用時和錯題解析。</p>
-      <div class="tiles">
-        <div class="tile"><svg class="ic"><use href="#i-shuffle"/></svg><b>20 題</b><span>題目同選項次序都隨機</span></div>
-        <div class="tile"><svg class="ic"><use href="#i-clock"/></svg><b>自動計時</b><span>按「開始」就計時</span></div>
-        <div class="tile"><svg class="ic"><use href="#i-list"/></svg><b>錯題解析</b><span>交卷後逐題看答案</span></div>
-      </div>
-      <button class="btn red" id="startBtn"><svg class="ic"><use href="#i-bolt"/></svg>開始刷題</button>
-      <p class="best" id="bestText" hidden></p>
-    </div>
-
     <div id="pQuiz" hidden>
       <div class="status" id="pStatus">
         <div class="status-row">
@@ -366,7 +384,7 @@ const P = { set: [], orders: [], picks: [], cur: 0, t0: 0, timer: null, secs: 0,
 function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 function startPractice(pool) {
   P.set = shuffle(pool).slice(0, 20); P.orders = P.set.map(() => shuffle([0, 1, 2, 3])); P.picks = new Array(P.set.length).fill(null); P.cur = 0; P.secs = 0;
-  $('#pStart').hidden = true; $('#pResult').hidden = true; $('#pQuiz').hidden = false;
+  $('#pResult').hidden = true; $('#pQuiz').hidden = false;
   $('#pDots').innerHTML = P.set.map((_, i) => `<button class="dot" data-i="${i}" aria-label="第 ${i + 1} 題">${i + 1}</button>`).join('');
   $('#pDots').style.setProperty('--n', P.set.length);
   clearInterval(P.timer); P.t0 = Date.now(); $('#pTime').textContent = '00:00';
@@ -432,23 +450,23 @@ function finish() {
   });
   $('#pQuiz').hidden = true; $('#pResult').hidden = false; scrollTo({ top: 0 });
 }
-$('#startBtn').addEventListener('click', () => startPractice(QUESTIONS.map(q => q.n)));
 $('#againBtn').addEventListener('click', () => startPractice(QUESTIONS.map(q => q.n)));
 $('#redoBtn').addEventListener('click', () => P.last && P.last.wrong.length && startPractice(P.last.wrong));
 $('#toReviewBtn').addEventListener('click', () => setMode('review'));
 function showBest() { const b = store.get('htmlQuizBest'); $('#bestText').hidden = !b; if (b) $('#bestText').textContent = `你的最佳紀錄：${b.right} / 20，用時 ${fmt(b.secs)}`; }
+const quizRunning = () => !$('#pQuiz').hidden;
 
 /* ================= 模式切換、鍵盤、其他 ================= */
 function setMode(m) {
-  const rev = m === 'review';
-  $('#modeReview').setAttribute('aria-pressed', rev); $('#modePractice').setAttribute('aria-pressed', !rev);
-  $('#review').hidden = !rev; $('#reviewBar').hidden = !rev; $('#practice').hidden = rev;
-  if (!rev && $('#pQuiz').hidden && $('#pResult').hidden) { $('#pStart').hidden = false; showBest(); }
-  try { history.replaceState(null, '', rev ? '#review' : '#practice'); } catch (e) {}
+  $('#home').hidden = m !== 'home'; $('#review').hidden = m !== 'review'; $('#practice').hidden = m !== 'practice';
+  $('#reviewBar').hidden = m !== 'review'; $('#homeBtn').hidden = m === 'home';
+  if (m === 'home') { showBest(); $('#practiceCta').firstChild.textContent = quizRunning() ? '繼續刷題' : '開始刷題'; }
+  try { history.replaceState(null, '', m === 'home' ? location.pathname + location.search : '#' + m); } catch (e) {}
   setHeadH(); scrollTo({ top: 0 });
 }
-$('#modeReview').addEventListener('click', () => setMode('review'));
-$('#modePractice').addEventListener('click', () => setMode('practice'));
+$('#chooseReview').addEventListener('click', () => setMode('review'));
+$('#choosePractice').addEventListener('click', () => { const resume = quizRunning(); setMode('practice'); if (!resume) startPractice(QUESTIONS.map(q => q.n)); });
+$('#homeBtn').addEventListener('click', () => setMode('home'));
 document.addEventListener('keydown', e => {
   if ($('#practice').hidden || $('#pQuiz').hidden || !$('#confirm').hidden) { if (e.key === 'Escape') $('#confirm').hidden = true; return; }
   if (e.target.closest('input,textarea')) return;
@@ -462,8 +480,8 @@ addEventListener('resize', setHeadH);
 addEventListener('scroll', () => { $('#backTop').hidden = scrollY < 600; }, { passive: true });
 $('#backTop').addEventListener('click', () => scrollTo({ top: 0 }));
 
-buildReview(); updateSeen(); setHeadH();
-if (location.hash === '#practice') setMode('practice');
+buildReview(); updateSeen();
+setMode(location.hash === '#review' ? 'review' : 'home');
 </script>
 </body>
 </html>
