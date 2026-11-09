@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HTML 小測溫習</title>
+<meta name="description" content="HTML 小測溫習：50 題選擇題，每題可看答案和解析，亦可隨機抽 20 題計時刷題。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Noto+Sans+TC:wght@500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* ===== UI UX Pro Max → Neubrutalism =====
+   Bold 3px black borders, hard 45° offset shadows, flat primary colours, sharp corners, no gradients. */
+:root{
+  --paper:#FFFDF2; --ink:#000; --white:#fff;
+  --yellow:#FFEB3B; --red:#FF5252; --blue:#2196F3; --teal:#4ECDC4;
+  --green:#00C853; --green-l:#B9F6CA; --red-l:#FFCDD2; --mute:#4A4A4A;
+  --b:3px solid var(--ink); --sh:4px 4px 0 var(--ink); --sh-l:8px 8px 0 var(--ink);
+  --head:"Space Grotesk","Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;
+  --body:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;
+  --mono:"JetBrains Mono",Consolas,"Courier New",monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:140px}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
+[hidden]{display:none!important}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.wrap{max-width:900px;margin:0 auto;padding:0 16px}
+code,.code{font-family:var(--mono);font-size:.92em;font-weight:500}
+.q-text code{background:var(--yellow);border:2px solid var(--ink);padding:0 5px;word-break:break-all}
+
+/* ---------- header ---------- */
+.site-head{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:var(--b)}
+.head-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:48px;height:48px;background:var(--yellow);border:var(--b);box-shadow:var(--sh);display:grid;place-items:center;font:700 17px var(--mono)}
+.brand h1{margin:0;font:900 24px/1.1 var(--head);letter-spacing:.5px}
+.brand p{margin:2px 0 0;font-size:14px;color:var(--mute);font-weight:500}
+.modes{display:flex;border:var(--b);box-shadow:var(--sh);background:var(--white)}
+.mode{display:flex;align-items:center;gap:8px;border:0;background:var(--white);padding:9px 16px;font-weight:900;font-size:16px}
+.mode + .mode{border-left:var(--b)}
+.mode[aria-pressed="true"]{background:var(--red)}
+.mode:hover{background:var(--yellow)}
+.mode[aria-pressed="true"]:hover{background:var(--red)}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:var(--b);background:var(--white);box-shadow:var(--sh);padding:9px 18px;font-weight:900;font-size:16px;transition:transform .12s ease,box-shadow .12s ease,background .15s}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+.btn:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
+.btn.yellow{background:var(--yellow)} .btn.red{background:var(--red)} .btn.blue{background:var(--blue);color:var(--white)} .btn.teal{background:var(--teal)}
+.btn.small{padding:6px 12px;font-size:14px;box-shadow:3px 3px 0 var(--ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:var(--sh)}
+
+/* ---------- review toolbar ---------- */
+.toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 16px 12px}
+.counter{font-weight:900;font-size:15px;display:flex;align-items:center;gap:10px}
+.bar{width:140px;height:14px;border:var(--b);background:var(--white)}
+.bar i{display:block;height:100%;background:var(--blue);border-right:3px solid var(--ink);width:0;transition:width .3s}
+.bar i[style*="width: 0"]{border-right:0}
+.jumps{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto}
+.jump{border:var(--b);background:var(--white);font:700 14px var(--head);padding:3px 10px;box-shadow:3px 3px 0 var(--ink);text-decoration:none;color:var(--ink)}
+.jump:hover{background:var(--yellow)}
+
+/* ---------- question card ---------- */
+main.wrap{padding:26px 16px 70px}
+.group-title{display:inline-block;margin:26px 0 14px;font:900 18px var(--head);background:var(--ink);color:var(--white);padding:4px 14px}
+.group-title:first-child{margin-top:0}
+.card{background:var(--white);border:var(--b);box-shadow:var(--sh-l);padding:20px 22px;margin-bottom:26px}
+.q-head{display:flex;gap:14px;align-items:flex-start}
+.no{flex:none;min-width:46px;height:46px;padding:0 6px;display:grid;place-items:center;background:var(--blue);color:var(--white);border:var(--b);font:700 19px var(--head)}
+.q-text{margin:6px 0 0;font-size:19px;font-weight:700;line-height:1.55}
+.q-img{display:block;width:100%;max-width:560px;height:auto;margin:16px 0 4px;border:var(--b);background:#fff}
+.opts{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;border:var(--b);background:var(--white);padding:9px 12px;min-height:50px;width:100%;text-align:left;transition:background .15s,box-shadow .15s,transform .12s}
+.opt .key{flex:none;width:32px;height:32px;display:grid;place-items:center;background:var(--yellow);border:2px solid var(--ink);font:700 16px var(--head)}
+.opt .val{flex:1;min-width:0;word-break:break-word}
+.opt .val.code{word-break:break-all}
+.opt .mark{flex:none;display:none;align-items:center;gap:4px;font-size:13px;font-weight:900;padding:2px 8px;border:2px solid var(--ink)}
+.opt.correct{background:var(--green-l);box-shadow:4px 4px 0 var(--ink)}
+.opt.correct .key{background:var(--green)}
+.opt.correct .mark.ok{display:flex;background:var(--green)}
+.opt.wrong{background:var(--red-l)}
+.opt.wrong .key{background:var(--red)}
+.opt.wrong .mark.no{display:flex;background:var(--red)}
+button.opt:hover{background:#FFF8C4}
+button.opt[aria-checked="true"]{background:var(--yellow);box-shadow:4px 4px 0 var(--ink);transform:translate(-2px,-2px)}
+button.opt[aria-checked="true"] .key{background:var(--ink);color:var(--white)}
+.card-foot{display:flex;align-items:center;gap:12px;margin-top:16px;flex-wrap:wrap}
+.answer{margin-top:16px;background:var(--teal);border:var(--b);box-shadow:5px 5px 0 var(--ink);padding:12px 16px;animation:drop .25s ease}
+.answer h3{margin:0;display:flex;align-items:center;gap:8px;font:900 19px var(--head)}
+.answer p{margin:6px 0 0;font-weight:500}
+.answer code{background:var(--white);border:2px solid var(--ink);padding:0 4px}
+@keyframes drop{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+
+/* ---------- practice ---------- */
+.panel{background:var(--white);border:var(--b);box-shadow:var(--sh-l);padding:26px 24px}
+.start h2{margin:0 0 6px;font:900 34px/1.15 var(--head)}
+.start p.lead{margin:0 0 20px;color:var(--mute);font-weight:500}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+.tile{border:var(--b);padding:14px;display:flex;flex-direction:column;gap:6px}
+.tile .ic{width:28px;height:28px}
+.tile b{font:900 22px var(--head)} .tile span{font-size:14px;color:var(--mute);font-weight:500}
+.tile:nth-child(1){background:var(--yellow)} .tile:nth-child(2){background:var(--teal)} .tile:nth-child(3){background:#FFE0B2}
+.best{margin:16px 0 0;font-size:15px;font-weight:700}
+.status{position:sticky;top:var(--headH,76px);z-index:10;background:var(--paper);padding:12px 0 10px}
+.status-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.status .pos{font:900 20px var(--head)}
+.timer{display:flex;align-items:center;gap:8px;font:700 20px var(--mono);border:var(--b);background:var(--yellow);padding:4px 12px;box-shadow:3px 3px 0 var(--ink)}
+.dots{display:grid;grid-template-columns:repeat(var(--n,20),minmax(0,1fr));gap:5px;margin-top:10px}
+.dot{aspect-ratio:1;border:2px solid var(--ink);background:var(--white);font:700 11px var(--head);display:grid;place-items:center;padding:0}
+.dot.done{background:var(--ink);color:var(--white)}
+.dot.now{outline:3px solid var(--red);outline-offset:1px}
+.nav-row{display:flex;justify-content:space-between;gap:12px;margin-top:18px;flex-wrap:wrap}
+.hint{font-size:13px;color:var(--mute);margin-top:10px;font-weight:500}
+/* result */
+.score{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center}
+.big{font:900 76px/1 var(--head);border:var(--b);background:var(--yellow);box-shadow:var(--sh-l);padding:14px 22px;position:relative}
+.big small{font-size:30px}
+.stamp{position:absolute;right:-18px;top:-16px;transform:rotate(8deg);background:var(--red);border:var(--b);font:900 16px var(--body);padding:3px 10px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.stat{border:var(--b);padding:10px 12px}
+.stat b{display:block;font:900 26px var(--head)} .stat span{font-size:14px;font-weight:700;color:var(--mute)}
+.stat:nth-child(1){background:var(--green-l)} .stat:nth-child(2){background:var(--red-l)} .stat:nth-child(3){background:#E3F2FD}
+.res-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.wrong-title{display:inline-flex;align-items:center;gap:8px;margin:34px 0 16px;font:900 22px var(--head);background:var(--red);border:var(--b);padding:4px 14px;box-shadow:var(--sh)}
+.perfect{margin-top:30px;background:var(--green-l);border:var(--b);box-shadow:var(--sh-l);padding:20px;font-weight:900;font-size:20px;display:flex;gap:10px;align-items:center}
+.your{font-size:14px;font-weight:900;margin:10px 0 0;display:flex;gap:16px;flex-wrap:wrap}
+.your span{border:2px solid var(--ink);padding:1px 8px}
+.your .src{border:0;padding:0;color:var(--mute);font-weight:700}
+.your .y{background:var(--red-l)} .your .c{background:var(--green-l)}
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:grid;place-items:center;z-index:50;padding:16px}
+.modal .panel{max-width:420px;width:100%}
+.modal h2{margin:0 0 8px;font:900 22px var(--head)}
+.modal .res-actions{margin-top:18px}
+footer{border-top:var(--b);padding:16px 0 30px;font-size:14px;color:var(--mute);font-weight:500}
+.back-top{position:fixed;right:16px;bottom:16px;z-index:15;width:48px;height:48px;padding:0}
+
+@media (max-width:640px){
+  body{font-size:16px}
+  .site-head{position:relative}
+  .status{top:0!important}
+  .mark .mt{display:none}
+  .opt .mark{padding:2px 4px}
+  .stat span{font-size:12px}
+  .brand h1{font-size:20px} .brand p{display:none}
+  .logo{width:40px;height:40px;font-size:14px}
+  .modes{width:100%} .mode{flex:1;justify-content:center;padding:8px 6px;font-size:15px}
+  .jumps{margin-left:0}
+  .card{padding:16px 14px;box-shadow:5px 5px 0 var(--ink)}
+  .q-text{font-size:17px}
+  .no{min-width:40px;height:40px;font-size:17px}
+  .tiles{grid-template-columns:1fr}
+  .dots{display:flex;overflow-x:auto;gap:6px;padding:4px 2px 8px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+  .dot{flex:0 0 40px;height:40px;font-size:14px;scroll-snap-align:center}
+  .status{border-bottom:var(--b);margin:0 -16px;padding:10px 16px 6px}
+  .status .pos{font-size:18px} .timer{font-size:17px;padding:3px 10px}
+  .nav-row{position:sticky;bottom:0;z-index:12;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;background:var(--paper);border-top:var(--b);margin:18px -16px 0;padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
+  .nav-row > div{display:contents!important}
+  .nav-row .btn{padding:11px 6px;font-size:15px;min-height:48px}
+  .hint{display:none}
+  .opt{min-height:54px;padding:10px}
+  .opt .key{width:30px;height:30px}
+  .q-img{margin:12px 0 2px}
+  .toolbar{gap:10px}
+  .toolbar .btn{flex:1 1 100%}
+  .counter{flex:1 1 100%}
+  .bar{flex:1}
+  .jumps{width:100%;display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+  .jump{text-align:center;padding:6px 0}
+  .res-actions .btn{flex:1 1 calc(50% - 6px)}
+  .wrong-title{font-size:18px}
+  .back-top{bottom:84px}
+  .score{grid-template-columns:1fr}
+  .big{font-size:60px;justify-self:start}
+  .stats{grid-template-columns:1fr 1fr 1fr}
+  .stat b{font-size:20px}
+  .start h2{font-size:27px}
+}
+@media (max-width:360px){.brand h1{font-size:18px}.mode{font-size:14px;gap:4px}.mode .ic{width:16px;height:16px}.res-actions .btn{flex:1 1 100%}.stat{padding:8px}.stat b{font-size:17px}.stat span{font-size:11px}.big{font-size:52px}.nav-row .btn{font-size:14px}.nav-row .btn .ic{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M3 3l18 18M10.6 5.1A10.9 10.9 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4M6.6 6.6A17 17 0 0 0 2 12s3.6 7 10 7a10 10 0 0 0 5.4-1.6M9.9 9.9a3 3 0 0 0 4.2 4.2"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+<symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3Z"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M4 4h6a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H4zM20 4h-6a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h6z"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></symbol>
+<symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+<symbol id="i-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+<symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+<symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 21V4M4 4h12l-2 4 2 4H4"/></symbol>
+<symbol id="i-redo" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5"/></symbol>
+<symbol id="i-up" viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></symbol>
+<symbol id="i-trophy" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></symbol>
+</defs></svg>
+
+<header class="site-head" id="siteHead">
+  <div class="wrap head-row">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">&lt;/&gt;</div>
+      <div><h1>HTML 小測溫習</h1><p>50 題選擇題，每題都有答案和解析</p></div>
+    </div>
+    <div class="modes" role="group" aria-label="切換模式">
+      <button class="mode" id="modeReview" aria-pressed="true"><svg class="ic"><use href="#i-book"/></svg>溫習 50 題</button>
+      <button class="mode" id="modePractice" aria-pressed="false"><svg class="ic"><use href="#i-bolt"/></svg>隨機刷 20 題</button>
+    </div>
+  </div>
+  <div class="wrap toolbar" id="reviewBar">
+    <button class="btn yellow" id="toggleAll" aria-pressed="false"><svg class="ic"><use href="#i-eye"/></svg><span>顯示全部答案</span></button>
+    <div class="counter" aria-live="polite"><div class="bar" aria-hidden="true"><i id="seenBar"></i></div><span id="seenText">已看答案 0 / 50</span></div>
+    <nav class="jumps" aria-label="跳到題目" id="jumps"></nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- 溫習模式 -->
+  <section id="review" aria-label="溫習全部題目"></section>
+
+  <!-- 刷題模式 -->
+  <section id="practice" hidden aria-label="隨機刷題">
+    <div class="panel start" id="pStart">
+      <h2>隨機刷 20 題</h2>
+      <p class="lead">由 50 題題庫隨機抽出 20 題，A–D 選項次序亦會打亂。答完交卷就會看到成績、用時和錯題解析。</p>
+      <div class="tiles">
+        <div class="tile"><svg class="ic"><use href="#i-shuffle"/></svg><b>20 題</b><span>題目同選項次序都隨機</span></div>
+        <div class="tile"><svg class="ic"><use href="#i-clock"/></svg><b>自動計時</b><span>按「開始」就計時</span></div>
+        <div class="tile"><svg class="ic"><use href="#i-list"/></svg><b>錯題解析</b><span>交卷後逐題看答案</span></div>
+      </div>
+      <button class="btn red" id="startBtn"><svg class="ic"><use href="#i-bolt"/></svg>開始刷題</button>
+      <p class="best" id="bestText" hidden></p>
+    </div>
+
+    <div id="pQuiz" hidden>
+      <div class="status" id="pStatus">
+        <div class="status-row">
+          <div class="pos" id="pPos">第 1 / 20 題</div>
+          <div class="timer" aria-label="已用時間"><svg class="ic"><use href="#i-clock"/></svg><span id="pTime">00:00</span></div>
+        </div>
+        <div class="dots" id="pDots" aria-label="題目導航"></div>
+      </div>
+      <div id="pCard"></div>
+      <div class="nav-row">
+        <button class="btn" id="prevBtn"><svg class="ic"><use href="#i-left"/></svg>上一題</button>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn yellow" id="nextBtn">下一題<svg class="ic"><use href="#i-right"/></svg></button>
+          <button class="btn red" id="submitBtn"><svg class="ic"><use href="#i-flag"/></svg>交卷</button>
+        </div>
+      </div>
+      <p class="hint">電腦鍵盤：按 A–D 或 1–4 揀答案，← → 轉題。每次刷題，題目同選項次序都會隨機排列。</p>
+    </div>
+
+    <div id="pResult" hidden>
+      <div class="panel">
+        <div class="score">
+          <div class="big" id="rScore">0<small> / 20</small><span class="stamp" id="rStamp">再加油</span></div>
+          <div>
+            <div class="stats">
+              <div class="stat"><b id="rRight">0</b><span>答對</span></div>
+              <div class="stat"><b id="rWrong">0</b><span>答錯／未答</span></div>
+              <div class="stat"><b id="rTime">00:00</b><span>用時</span></div>
+            </div>
+            <p class="best" id="rBest"></p>
+          </div>
+        </div>
+        <div class="res-actions">
+          <button class="btn red" id="againBtn"><svg class="ic"><use href="#i-shuffle"/></svg>再刷 20 題</button>
+          <button class="btn yellow" id="redoBtn"><svg class="ic"><use href="#i-redo"/></svg>重做錯題</button>
+          <button class="btn" id="toReviewBtn"><svg class="ic"><use href="#i-book"/></svg>返回溫習</button>
+        </div>
+      </div>
+      <div id="rList"></div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">HTML 小測溫習。題目共 50 題，刷題模式每次隨機抽 20 題。</div></footer>
+<button class="btn yellow back-top" id="backTop" aria-label="回到頂部" hidden><svg class="ic"><use href="#i-up"/></svg></button>
+
+<div class="modal" id="confirm" hidden role="dialog" aria-modal="true" aria-labelledby="cTitle">
+  <div class="panel">
+    <h2 id="cTitle">仲有題目未答</h2>
+    <p id="cText" style="margin:0;font-weight:500"></p>
+    <div class="res-actions">
+      <button class="btn" id="cBack">返回作答</button>
+      <button class="btn red" id="cGo">確定交卷</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [{"n":1,"q":"下列哪一個是 HTML 網頁檔案常用的副檔名？","img":null,"opts":[".html",".docx",".jpg",".pptx"],"ans":0,"exp":"HTML 網頁通常使用 .html。"},{"n":2,"q":"網頁中主要顯示在瀏覽器畫面上的內容，通常放在哪一個標籤內？","img":null,"opts":["<head>","<body>","<title>","<meta>"],"ans":1,"exp":"可見的網頁主要內容放在 <body>。"},{"n":3,"q":"要在網頁中插入圖片，應使用哪一個標籤？","img":null,"opts":["<a>","<p>","<img>","<table>"],"ans":2,"exp":"插入圖片使用 <img>。"},{"n":4,"q":"在 <img> 標籤中，用來指定圖片檔案位置的屬性是？","img":null,"opts":["href","src","title","target"],"ans":1,"exp":"圖片來源使用 src。"},{"n":5,"q":"要建立超連結，應使用哪一個標籤？","img":null,"opts":["<a>","<img>","<tr>","<td>"],"ans":0,"exp":"超連結使用 <a>。"},{"n":6,"q":"在 <a> 標籤中，用來指定連結網址的屬性是？","img":null,"opts":["src","alt","href","width"],"ans":2,"exp":"連結目的地使用 href。"},{"n":7,"q":"建立表格時，最外層應使用哪一個標籤？","img":null,"opts":["<table>","<tr>","<th>","<td>"],"ans":0,"exp":"表格外層為 <table>。"},{"n":8,"q":"在表格中，代表「一列」（橫向一行）的標籤是？","img":null,"opts":["<table>","<tr>","<th>","<td>"],"ans":1,"exp":"<tr> 代表表格一列。"},{"n":9,"q":"在表格中，通常用來表示「標題儲存格」的標籤是？","img":null,"opts":["<th>","<td>","<tr>","<a>"],"ans":0,"exp":"<th> 代表標題儲存格。"},{"n":10,"q":"在表格中，通常用來表示「一般資料儲存格」的標籤是？","img":null,"opts":["<img>","<td>","<th>","<body>"],"ans":1,"exp":"<td> 代表一般資料儲存格。"},{"n":11,"q":"圖中網頁效果對應哪一段 HTML？","img":"images/q11.png","opts":["<h1>我的網站</h1><p>歡迎來到我的網站</p>","<title>我的網站</title><title>歡迎來到我的網站</title>","<p>我的網站</p><h1>歡迎來到我的網站</h1>","<h1>我的網站</h1><hr>歡迎來到我的網站"],"ans":0,"exp":"h1 是大標題，p 是段落。"},{"n":12,"q":"哪段 HTML 能顯示圖中的兩行文字？","img":"images/q12.png","opts":["<h1>早安</h1><h1>晚安</h1>","<p>早安</p><p>晚安</p>","<title>早安</title><title>晚安</title>","<a href=\"早安\">晚安</a>"],"ans":1,"exp":"兩行一般段落使用 p。"},{"n":13,"q":"哪段 HTML 能顯示圖中的圓點清單？","img":"images/q13.png","opts":["<ol><li>蘋果</li><li>香蕉</li><li>橙</li></ol>","<table><tr><td>蘋果</td><td>香蕉</td><td>橙</td></tr></table>","<ul><li>蘋果</li><li>香蕉</li><li>橙</li></ul>","<p>蘋果 香蕉 橙</p>"],"ans":2,"exp":"ul 是無序圓點清單，li 是清單項目。"},{"n":14,"q":"哪段 HTML 能顯示圖中的數字步驟？","img":"images/q14.png","opts":["<ul><li>開啟網頁</li><li>選擇圖片</li><li>按下連結</li></ul>","<ol><li>開啟網頁</li><li>選擇圖片</li><li>按下連結</li></ol>","<tr><td>開啟網頁</td></tr>","<p>開啟網頁</p><p>選擇圖片</p>"],"ans":1,"exp":"ol 會顯示有序數字項目。"},{"n":15,"q":"哪段 HTML 能顯示圖中的表格？","img":"images/q15.png","opts":["<ul><li>姓名</li><li>分數</li></ul>","<table><tr><td>姓名</td></tr><tr><td>分數</td></tr></table>","<table><tr><th>姓名</th><th>分數</th></tr><tr><td>小明</td><td>90</td></tr><tr><td>小美</td><td>85</td></tr></table>","<table><td>姓名</td><td>分數</td></table>"],"ans":2,"exp":"table 包住表格；tr 是列，th 是標題格，td 是資料格。"},{"n":16,"q":"哪段 HTML 能顯示圖中的水平分隔線？","img":"images/q16.png","opts":["<p>上半部</p><br><p>下半部</p>","<p>上半部</p><hr><p>下半部</p>","<h1>上半部</h1><h1>下半部</h1>","<p>上半部</p><img src=\"line.jpg\"><p>下半部</p>"],"ans":1,"exp":"hr 會畫出水平分隔線，br 只換行。"},{"n":17,"q":"哪段 HTML 能顯示圖中的藍色可點擊文字「前往首頁」？","img":"images/q17.png","opts":["<img src=\"index.html\">","<p href=\"index.html\">前往首頁</p>","<a href=\"index.html\">前往首頁</a>","<title href=\"index.html\">前往首頁</title>"],"ans":2,"exp":"a 搭配 href 建立超連結。"},{"n":18,"q":"哪段 HTML 能顯示圖中的圖片及替代說明？","img":"images/q18.png","opts":["<a href=\"cat.jpg\">小貓</a>","<img href=\"cat.jpg\" alt=\"小貓\">","<img src=\"cat.jpg\" alt=\"小貓\">","<p src=\"cat.jpg\">小貓</p>"],"ans":2,"exp":"img src 指定圖片，alt 提供替代文字。"},{"n":19,"q":"哪段 HTML 能顯示圖中的「課程資料」標題和清單？","img":"images/q19.png","opts":["<h1>課程資料</h1><ul><li>HTML</li><li>網頁設計</li></ul>","<title>課程資料</title><ul><li>HTML</li><li>網頁設計</li></ul>","<h1>課程資料</h1><ol><li>HTML</li><li>網頁設計</li></ol>","<p>課程資料</p><p>HTML 網頁設計</p>"],"ans":0,"exp":"h1 係頁內標題；ul 係圓點清單。"},{"n":20,"q":"哪段 HTML 能顯示圖中的巢狀列表？","img":"images/q20.png","opts":["<ol><li>水果</li><li>蘋果</li><li>香蕉</li></ol>","<ul><li>水果<ul><li>蘋果</li><li>香蕉</li></ul></li></ul>","<table><tr><td>水果</td><td>蘋果</td><td>香蕉</td></tr></table>","<ul><li>水果</li></ul><ul><li>蘋果</li><li>香蕉</li></ul>"],"ans":1,"exp":"內層 ul 應放在外層 li 內，形成巢狀清單。"},{"n":21,"q":"以下哪項可以解釋為甚麼 `<title>我的班別</title>` 不會像 `<h1>` 一樣成為網頁內的大標題？","img":null,"opts":["因為 title 只可放圖片","因為 title 主要設定瀏覽器分頁標題","因為 title 會自動變成連結","因為所有 title 都是註解"],"ans":1,"exp":"title 設定分頁標題；h1 才是頁面內可見的主標題。"},{"n":22,"q":"某網頁和 cat.jpg 都放在同一資料夾，哪段 HTML 最適合正確顯示圖片並提供替代文字？","img":null,"opts":["<img href=\"cat.jpg\" alt=\"貓\">","<a src=\"cat.jpg\" alt=\"貓\">","<img src=\"cat.jpg\" alt=\"貓\">","<img src=\"images/cat.jpg\" alt=\"貓\">"],"ans":2,"exp":"同資料夾圖片用 src=\"cat.jpg\"，alt 用於替代文字。"},{"n":23,"q":"以下哪段 HTML 的開始與結束標籤先後次序完全配對？","img":null,"opts":["<p><a href=\"page2.html\">下一頁</p></a>","<p><a href=\"page2.html\">下一頁</a></p>","<p><a href=\"page2.html\">下一頁</p>","<p><a href=\"page2.html\">下一頁</a>"],"ans":1,"exp":"外層 p 先開，內層 a 先關，最後關 p。"},{"n":24,"q":"學生把檔案命名為 index.html.txt。下列哪個判斷最準確？","img":null,"opts":["它的副檔名是 .html","它的副檔名是 .txt","檔名中有 html 就一定是 HTML 檔","它一定是圖片檔"],"ans":1,"exp":"副檔名看最後的 .txt，不是檔名中間的 .html。"},{"n":25,"q":"要令「校園首頁」文字連結到同一資料夾的 index.html，以下哪段最合適？","img":null,"opts":["<a href=\"index.html\">校園首頁</a>","<a src=\"index.html\">校園首頁</a>","<img href=\"index.html\">校園首頁","<p href=\"index.html\">校園首頁</p>"],"ans":0,"exp":"連結要用 a 和 href；src 是圖片來源。"},{"n":26,"q":"以下 HTML：`<table><tr><th>科目</th><th>分數</th></tr><tr><td>英文</td><td>88</td></tr></table>`。共有幾個儲存格？","img":null,"opts":["2 個","3 個","4 個","6 個"],"ans":2,"exp":"兩個 th 加兩個 td，共 4 個儲存格；tr 不算儲存格。"},{"n":27,"q":"若要令一張圖片可以點擊後開啟 page2.html，以下哪段正確？","img":null,"opts":["<img src=\"page2.html\" href=\"cat.jpg\">","<a src=\"page2.html\"><img href=\"cat.jpg\"></a>","<a href=\"page2.html\"><img src=\"cat.jpg\" alt=\"小貓\"></a>","<img href=\"page2.html\"><a src=\"cat.jpg\"></a>"],"ans":2,"exp":"圖片放在 a 標籤內；a 的 href 指向頁面，img 的 src 指向圖片。"},{"n":28,"q":"以下哪段 HTML 會產生「有編號的主列表」，其中第一項下面另有圓點子列表？","img":null,"opts":["<ol><li>水果<ul><li>蘋果</li></ul></li></ol>","<ul><li>水果<ol><li>蘋果</li></ol></li></ul>","<ol><li>水果</li><li>蘋果</li></ol>","<ul><li>水果</li><li>蘋果</li></ul>"],"ans":0,"exp":"外層 ol 產生有編號的主項；內層 ul 產生圓點子項。"},{"n":29,"q":"在 `<img src=\"photos/dog.jpg\" alt=\"小狗\" width=\"180\">` 中，以下哪項解釋正確？","img":null,"opts":["alt 指定檔案位置，src 指定寬度","width 指定連結網址","src 指定圖片位置，alt 是替代文字，width 指定寬度","這個標籤一定要加 </img> 才正確"],"ans":2,"exp":"src 路徑、alt 替代文字、width 寬度；img 無需結束標籤。"},{"n":30,"q":"已知 table 內有 `<caption>成績表</caption>`，再有一列 `<tr><th>姓名</th><th>分數</th></tr>`。哪項正確？","img":null,"opts":["caption 是一個資料儲存格","tr 是一個標題儲存格","caption 不計入儲存格；該列有 2 個標題儲存格","這列有 3 個儲存格"],"ans":2,"exp":"caption 是表格標題；2 個 th 就是 2 個標題儲存格。"},{"n":31,"q":"網站與網頁的關係，哪一項最正確？","img":null,"opts":["一個網頁必定包含很多網站","網站可由一個或多個網頁組成","網站等同圖片檔","網頁只能有文字"],"ans":1,"exp":"網站可由多個網頁組成。"},{"n":32,"q":"HTML 主要負責甚麼？","img":null,"opts":["編輯圖片像素","控制電腦音量","描述網頁結構與內容","儲存試算表公式"],"ans":2,"exp":"HTML 是網頁標記語言。"},{"n":33,"q":"瀏覽器會怎樣處理 HTML？","img":null,"opts":["讀取標記並顯示網頁","只會下載，不會顯示","自動變成 Word 文件","當成音樂播放"],"ans":0,"exp":"瀏覽器解讀 HTML 後呈現網頁。"},{"n":34,"q":"下列哪個標籤用來建立段落？","img":null,"opts":["<h1>","<p>","<hr>","<img>"],"ans":1,"exp":"<p> 表示段落。"},{"n":35,"q":"下列哪個標籤用來換行？","img":null,"opts":["<br>","<a>","<ol>","<td>"],"ans":0,"exp":"<br> 代表換行。"},{"n":36,"q":"下列哪個標籤通常用來顯示水平分隔線？","img":null,"opts":["<p>","<title>","<hr>","<li>"],"ans":2,"exp":"<hr> 是分隔線。"},{"n":37,"q":"哪一組標籤在 HTML 中不需要結束標籤？","img":null,"opts":["<p> 和 <h1>","<ul> 和 <ol>","<table> 和 <tr>","<br> 和 <hr>"],"ans":3,"exp":"br、hr 是空元素。"},{"n":38,"q":"關於 <title> 和 <h1>，哪項正確？","img":null,"opts":["兩者都必須放在 <body>","<title> 是分頁標題，<h1> 是網頁內標題","<h1> 只能放在 <head>","兩者都用來放圖片"],"ans":1,"exp":"title 通常位於 head，h1 位於 body。"},{"n":39,"q":"以下哪種檔名實際上是文字檔而非 .html 網頁檔？","img":null,"opts":["index.html.txt","index.html","home.html","page2.html"],"ans":0,"exp":"最後的副檔名是 .txt。"},{"n":40,"q":"圖片和 HTML 檔案放在同一資料夾，圖片名為 dog.jpg，src 最簡單可以寫甚麼？","img":null,"opts":["images/dog.jpg","../dog.jpg","dog.jpg","https://dog.jpg"],"ans":2,"exp":"同一資料夾可直接寫檔名。"},{"n":41,"q":"圖片在 images 子資料夾，正確相對路徑是哪一個？","img":null,"opts":["../images.jpg","images/cat.jpg","cat.jpg/images","images\\<cat>"],"ans":1,"exp":"子資料夾使用 images/cat.jpg。"},{"n":42,"q":"在相對路徑中，../ 通常代表甚麼？","img":null,"opts":["目前網頁標題","網頁底部","同一資料夾","上一層資料夾"],"ans":3,"exp":"../ 表示上一層資料夾。"},{"n":43,"q":"圖片的 alt 屬性主要用來做甚麼？","img":null,"opts":["提供圖片替代文字","指定連結網址","決定開新分頁","指定網頁標題"],"ans":0,"exp":"alt 提供圖片的替代描述。"},{"n":44,"q":"在 <img> 標籤中，width 用來指定甚麼？","img":null,"opts":["連結位置","圖片寬度","圖片檔名","網頁標題"],"ans":1,"exp":"width 表示圖片寬度。"},{"n":45,"q":"以下哪個是完整網址？","img":null,"opts":["www.example.com","http//example.com","https://example.com","href:example.com"],"ans":2,"exp":"HTTPS 網址通常以 https:// 開頭。"},{"n":46,"q":"要連結同一資料夾的 about.html，以下哪個正確 ？","img":null,"opts":["href=\"about.html\"","src=\"about.html\"","href=\"#about.html\"","width=\"about.html\""],"ans":0,"exp":"同資料夾的另一網頁用 href=\"about.html\"。"},{"n":47,"q":"哪一個標籤建立有編號的列表？","img":null,"opts":["<ul>","<li>","<ol>","<table>"],"ans":2,"exp":"ol 是 ordered list。"},{"n":48,"q":"要表示「第一步、第二步、第三步」，以下哪個最適合？","img":null,"opts":["<ul>","<p>","<img>","<ol>"],"ans":3,"exp":"步驟有順序，適合使用 ol。"},{"n":49,"q":"表格的 <caption> 用途是甚麼？","img":null,"opts":["建立一般儲存格","建立超連結","顯示表格標題","插入圖片"],"ans":2,"exp":"caption 為表格標題。"},{"n":50,"q":"某一列內有 2 個 <th> 和 1 個 <td>，這列共有多少個儲存格？","img":null,"opts":["3","2","1","4"],"ans":0,"exp":"th 和 td 都算儲存格。"}];
+
+const $ = s => document.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const LETTERS = 'ABCD';
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const ico = (id, cls = 'ic') => `<svg class="${cls}" aria-hidden="true"><use href="#${id}"/></svg>`;
+// question text: `code` spans become <code>
+const qText = s => s.split('`').map((p, i) => i % 2 ? `<code>${esc(p)}</code>` : esc(p)).join('');
+// explanation: wrap HTML tags like <body> in <code>
+const expText = s => esc(s).replace(/(&lt;\/?[a-z0-9]+&gt;)/gi, '<code>$1</code>');
+const isCode = s => /[<>=\/\\]|^\.|\.(html|txt|jpg|png)\b|^https?:/i.test(s);
+const fmt = sec => String(Math.floor(sec / 60)).padStart(2, '0') + ':' + String(sec % 60).padStart(2, '0');
+const store = { get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
+
+function optRow(q, i, tag = 'li', extra = '', pos = i) {
+  const v = q.opts[i];
+  return `<${tag} class="opt" data-i="${i}" ${extra}><span class="key">${LETTERS[pos]}</span><span class="val${isCode(v) ? ' code' : ''}">${esc(v)}</span><span class="mark ok">${ico('i-check')}<span class="mt">正確答案</span></span><span class="mark no">${ico('i-x')}<span class="mt">你的答案</span></span></${tag}>`;
+}
+function qHead(q, label) {
+  return `<div class="q-head"><span class="no">${label}</span><p class="q-text">${qText(q.q)}</p></div>` +
+    (q.img ? `<img class="q-img" src="${q.img}" alt="第 ${q.n} 題的網頁效果圖" loading="lazy" width="1080" height="410">` : '');
+}
+function answerBox(q, letter = LETTERS[q.ans]) {
+  return `<div class="answer"><h3>${ico('i-bulb')}答案：${letter}</h3><p>${expText(q.exp)}</p></div>`;
+}
+
+/* ================= 溫習模式 ================= */
+const seen = new Set();
+function buildReview() {
+  let h = '';
+  QUESTIONS.forEach((q, k) => {
+    if (k % 10 === 0) h += `<h2 class="group-title" id="g${k + 1}">第 ${k + 1}–${k + 10} 題</h2>`;
+    h += `<article class="card" id="q${q.n}" data-n="${q.n}">${qHead(q, String(q.n).padStart(2, '0'))}
+      <ol class="opts" aria-label="選項">${q.opts.map((_, i) => optRow(q, i)).join('')}</ol>
+      <div class="card-foot"><button class="btn yellow small show-btn" aria-expanded="false" aria-controls="a${q.n}">${ico('i-eye')}<span>顯示答案</span></button></div>
+      <div class="ans-slot" id="a${q.n}"></div></article>`;
+  });
+  $('#review').innerHTML = h;
+  $('#jumps').innerHTML = [1, 11, 21, 31, 41].map(n => `<a class="jump" href="#g${n}">${n}–${n + 9}</a>`).join('');
+}
+function setRevealed(card, on) {
+  const q = QUESTIONS[card.dataset.n - 1], btn = card.querySelector('.show-btn'), slot = card.querySelector('.ans-slot');
+  slot.innerHTML = on ? answerBox(q) : '';
+  card.querySelectorAll('.opt').forEach(o => o.classList.toggle('correct', on && +o.dataset.i === q.ans));
+  btn.setAttribute('aria-expanded', on);
+  btn.innerHTML = on ? `${ico('i-eye-off')}<span>隱藏答案</span>` : `${ico('i-eye')}<span>顯示答案</span>`;
+  if (on) seen.add(q.n);
+  updateSeen();
+}
+function updateSeen() {
+  $('#seenText').textContent = `已看答案 ${seen.size} / 50`;
+  $('#seenBar').style.width = (seen.size / 50 * 100) + '%';
+}
+$('#review').addEventListener('click', e => {
+  const b = e.target.closest('.show-btn'); if (!b) return;
+  const card = b.closest('.card'); setRevealed(card, b.getAttribute('aria-expanded') !== 'true');
+});
+$('#toggleAll').addEventListener('click', () => {
+  const on = $('#toggleAll').getAttribute('aria-pressed') !== 'true';
+  $$('#review .card').forEach(c => setRevealed(c, on));
+  $('#toggleAll').setAttribute('aria-pressed', on);
+  $('#toggleAll').innerHTML = on ? `${ico('i-eye-off')}<span>隱藏全部答案</span>` : `${ico('i-eye')}<span>顯示全部答案</span>`;
+});
+
+/* ================= 刷題模式 ================= */
+const P = { set: [], orders: [], picks: [], cur: 0, t0: 0, timer: null, secs: 0, last: null };
+function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function startPractice(pool) {
+  P.set = shuffle(pool).slice(0, 20); P.orders = P.set.map(() => shuffle([0, 1, 2, 3])); P.picks = new Array(P.set.length).fill(null); P.cur = 0; P.secs = 0;
+  $('#pStart').hidden = true; $('#pResult').hidden = true; $('#pQuiz').hidden = false;
+  $('#pDots').innerHTML = P.set.map((_, i) => `<button class="dot" data-i="${i}" aria-label="第 ${i + 1} 題">${i + 1}</button>`).join('');
+  $('#pDots').style.setProperty('--n', P.set.length);
+  clearInterval(P.timer); P.t0 = Date.now(); $('#pTime').textContent = '00:00';
+  P.timer = setInterval(() => { P.secs = Math.floor((Date.now() - P.t0) / 1000); $('#pTime').textContent = fmt(P.secs); }, 500);
+  renderQ(); scrollTo({ top: 0 });
+}
+function renderQ() {
+  const q = QUESTIONS[P.set[P.cur] - 1], total = P.set.length;
+  $('#pPos').textContent = `第 ${P.cur + 1} / ${total} 題`;
+  $('#pCard').innerHTML = `<article class="card">${qHead(q, P.cur + 1)}
+    <div class="opts" role="radiogroup" aria-label="選項">${P.orders[P.cur].map((i, pos) => optRow(q, i, 'button', `role="radio" aria-checked="${P.picks[P.cur] === i}"`, pos)).join('')}</div></article>`;
+  $$('#pDots .dot').forEach((d, i) => { d.classList.toggle('done', P.picks[i] !== null); d.classList.toggle('now', i === P.cur); });
+  $('#prevBtn').disabled = P.cur === 0;
+  $('#nextBtn').disabled = P.cur === total - 1;
+  const now = $$('#pDots .dot')[P.cur]; if (now && now.scrollIntoView) now.scrollIntoView({ block: 'nearest', inline: 'center' });
+}
+function pick(i) {
+  P.picks[P.cur] = i;
+  $$('#pCard .opt').forEach(o => o.setAttribute('aria-checked', +o.dataset.i === i));
+  $$('#pDots .dot')[P.cur].classList.add('done');
+}
+function go(i) { if (i < 0 || i >= P.set.length) return; P.cur = i; renderQ(); }
+$('#pCard').addEventListener('click', e => { const o = e.target.closest('.opt'); if (o) pick(+o.dataset.i); });
+$('#pDots').addEventListener('click', e => { const d = e.target.closest('.dot'); if (d) go(+d.dataset.i); });
+$('#prevBtn').addEventListener('click', () => go(P.cur - 1));
+$('#nextBtn').addEventListener('click', () => go(P.cur + 1));
+$('#submitBtn').addEventListener('click', () => {
+  const left = P.picks.filter(x => x === null).length;
+  if (left) { $('#cText').textContent = `仲有 ${left} 題未答，未答的題目會當作答錯。確定要交卷嗎？`; $('#confirm').hidden = false; $('#cBack').focus(); }
+  else finish();
+});
+$('#cBack').addEventListener('click', () => { $('#confirm').hidden = true; const k = P.picks.indexOf(null); if (k >= 0) go(k); });
+$('#cGo').addEventListener('click', () => { $('#confirm').hidden = true; finish(); });
+function finish() {
+  clearInterval(P.timer); P.secs = Math.floor((Date.now() - P.t0) / 1000);
+  const total = P.set.length, wrong = [];
+  P.set.forEach((n, i) => { if (P.picks[i] !== QUESTIONS[n - 1].ans) wrong.push(i); });
+  const right = total - wrong.length, pct = Math.round(right / total * 100);
+  P.last = { wrong: wrong.map(i => P.set[i]) };
+  $('#rScore').innerHTML = `${right}<small> / ${total}</small><span class="stamp" id="rStamp"></span>`;
+  $('#rStamp').textContent = pct === 100 ? '滿分！' : pct >= 80 ? '好叻！' : pct >= 60 ? '合格' : '再加油';
+  $('#rStamp').style.background = pct >= 60 ? 'var(--green)' : 'var(--red)';
+  $('#rRight').textContent = right; $('#rWrong').textContent = wrong.length; $('#rTime').textContent = fmt(P.secs);
+  // best record (only full 20-question rounds)
+  let bestMsg = '';
+  if (total === 20) {
+    const best = store.get('htmlQuizBest');
+    if (!best || right > best.right || (right === best.right && P.secs < best.secs)) { store.set('htmlQuizBest', { right, secs: P.secs }); bestMsg = best ? '新紀錄！' : ''; }
+    const b = store.get('htmlQuizBest'); if (b) bestMsg = `${bestMsg}最佳紀錄：${b.right} / 20，用時 ${fmt(b.secs)}`;
+  } else bestMsg = `今次重做 ${total} 題錯題。`;
+  $('#rBest').textContent = bestMsg;
+  $('#redoBtn').hidden = wrong.length === 0;
+  $('#rList').innerHTML = wrong.length ? `<h2 class="wrong-title">${ico('i-x')}錯題 ${wrong.length} 題：看看正確答案和解析</h2>` + wrong.map(i => {
+    const q = QUESTIONS[P.set[i] - 1], my = P.picks[i], ord = P.orders[i], L = k => LETTERS[ord.indexOf(k)];
+    return `<article class="card">${qHead(q, i + 1)}
+      <ol class="opts">${ord.map((k, pos) => optRow(q, k, 'li', '', pos)).join('')}</ol>
+      <p class="your"><span class="y">你的答案：${my === null ? '未答' : L(my)}</span><span class="c">正確答案：${L(q.ans)}</span><span class="src">原卷第 ${q.n} 題</span></p>
+      ${answerBox(q, L(q.ans))}</article>`;
+  }).join('') : `<div class="perfect">${ico('i-trophy')}全部答對！可以再刷一次，挑戰更短時間。</div>`;
+  $$('#rList .card').forEach((card, k) => {
+    const i = wrong[k], q = QUESTIONS[P.set[i] - 1], my = P.picks[i];
+    card.querySelectorAll('.opt').forEach(o => { const v = +o.dataset.i; o.classList.toggle('correct', v === q.ans); o.classList.toggle('wrong', v === my && my !== q.ans); });
+  });
+  $('#pQuiz').hidden = true; $('#pResult').hidden = false; scrollTo({ top: 0 });
+}
+$('#startBtn').addEventListener('click', () => startPractice(QUESTIONS.map(q => q.n)));
+$('#againBtn').addEventListener('click', () => startPractice(QUESTIONS.map(q => q.n)));
+$('#redoBtn').addEventListener('click', () => P.last && P.last.wrong.length && startPractice(P.last.wrong));
+$('#toReviewBtn').addEventListener('click', () => setMode('review'));
+function showBest() { const b = store.get('htmlQuizBest'); $('#bestText').hidden = !b; if (b) $('#bestText').textContent = `你的最佳紀錄：${b.right} / 20，用時 ${fmt(b.secs)}`; }
+
+/* ================= 模式切換、鍵盤、其他 ================= */
+function setMode(m) {
+  const rev = m === 'review';
+  $('#modeReview').setAttribute('aria-pressed', rev); $('#modePractice').setAttribute('aria-pressed', !rev);
+  $('#review').hidden = !rev; $('#reviewBar').hidden = !rev; $('#practice').hidden = rev;
+  if (!rev && $('#pQuiz').hidden && $('#pResult').hidden) { $('#pStart').hidden = false; showBest(); }
+  try { history.replaceState(null, '', rev ? '#review' : '#practice'); } catch (e) {}
+  setHeadH(); scrollTo({ top: 0 });
+}
+$('#modeReview').addEventListener('click', () => setMode('review'));
+$('#modePractice').addEventListener('click', () => setMode('practice'));
+document.addEventListener('keydown', e => {
+  if ($('#practice').hidden || $('#pQuiz').hidden || !$('#confirm').hidden) { if (e.key === 'Escape') $('#confirm').hidden = true; return; }
+  if (e.target.closest('input,textarea')) return;
+  const k = e.key.toUpperCase(), idx = 'ABCD'.indexOf(k) >= 0 ? 'ABCD'.indexOf(k) : '1234'.indexOf(k);
+  if (idx >= 0 && e.key.length === 1) { pick(P.orders[P.cur][idx]); e.preventDefault(); }
+  else if (e.key === 'ArrowRight') go(P.cur + 1);
+  else if (e.key === 'ArrowLeft') go(P.cur - 1);
+});
+function setHeadH() { const mob = innerWidth <= 640, h = mob ? 0 : $('#siteHead').offsetHeight; document.documentElement.style.setProperty('--headH', h + 'px'); document.documentElement.style.scrollPaddingTop = (h + 16) + 'px'; }
+addEventListener('resize', setHeadH);
+addEventListener('scroll', () => { $('#backTop').hidden = scrollY < 600; }, { passive: true });
+$('#backTop').addEventListener('click', () => scrollTo({ top: 0 }));
+
+buildReview(); updateSeen(); setHeadH();
+if (location.hash === '#practice') setMode('practice');
+</script>
+</body>
+</html>
